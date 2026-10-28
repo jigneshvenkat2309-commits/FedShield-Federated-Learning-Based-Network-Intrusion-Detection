@@ -1,0 +1,9 @@
+# FedShield Requirements
+# Python >= 3.10 (Tested on Python 3.13.7 64-bit on Windows)
+
+torch>=2.0.0
+scikit-learn>=1.3.0
+pandas>=2.0.01
+numpy>=1.24.0
+matplotlib>=3.7.0
+

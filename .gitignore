@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments & IDEs
+.env
+.venv/
+env/
+venv/
+.vscode/
+.idea/
+
+# Scratch & Backups
+scratch/
+results_backup/
+
+# Large Datasets & Binary Preprocessed Arrays
+# (Download via 'python download_data.py' & generate via 'python preprocess.py')
+data/raw/*.txt
+data/processed/*.npy
+data/processed/*.pkl
+data/partitions/*/*.npz
+
+# Keep directory structure in Git
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/partitions/iid/.gitkeep
+!data/partitions/non_iid/.gitkeep

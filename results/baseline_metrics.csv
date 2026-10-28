@@ -1,0 +1,8 @@
+Model,Condition,Client,Seed,Train Samples,Test Samples,Epochs,Training Time (s),Test Loss,Accuracy (%),Precision (%),Recall (%),Macro-F1 (%),FPR (%),TN,FP,FN,TP
+Centralized Baseline,centralized,all,42,125973,22544,10,17.495,1.4967,78.71,96.87,64.68,78.65,2.76,9443,268,4532,8301
+Local Model (IID - client_1),iid,client_1,101,41992,22544,10,5.791,1.2139,74.51,91.5,60.87,74.44,7.48,8985,726,5021,7812
+Local Model (IID - client_2),iid,client_2,102,41991,22544,10,5.478,1.0884,75.38,91.66,62.42,75.33,7.51,8982,729,4822,8011
+Local Model (IID - client_3),iid,client_3,103,41990,22544,10,5.553,1.067,74.48,91.48,60.83,74.41,7.49,8984,727,5027,7806
+Local Model (NON_IID - client_1),non_iid,client_1,111,47008,22544,10,6.44,1.6254,71.33,91.54,54.69,71.09,6.68,9062,649,5815,7018
+Local Model (NON_IID - client_2),non_iid,client_2,112,51654,22544,10,6.722,0.7437,81.93,91.8,74.96,81.91,8.85,8852,859,3214,9619
+Local Model (NON_IID - client_3),non_iid,client_3,113,27311,22544,10,3.81,1.1436,73.19,91.54,58.3,73.07,7.12,9020,691,5352,7481

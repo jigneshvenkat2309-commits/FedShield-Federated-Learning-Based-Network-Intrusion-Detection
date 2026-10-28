@@ -1,0 +1,6 @@
+Category,Architecture / Model,Train Data / Scope,Train Time (s),Comm (MB),Accuracy (%),Precision (%),Recall (%),Macro-F1 (%),FPR (%),TN,FP,FN,TP
+Centralized Upper Bound,Centralized Baseline,"125,973 (All Data)",17.495,0.0,78.71,96.87,64.68,78.65,2.76,9443,268,4532,8301
+IID Local Baselines,IID Local Models (Average of 3 Clients),"~41,991 / client",5.61,0.0,74.79,91.55,61.37,74.73,7.49,-,-,-,-
+IID Federated,FedAvg Global (IID),"125,973 (Federated 3x)",21.594,2.447,76.32,91.98,63.98,76.29,7.37,8995,716,4622,8211
+Non-IID Local Baselines,Non-IID Local Models (Average of 3 Clients),"~41,991 / client",5.66,0.0,75.48,91.63,62.65,75.36,7.55,-,-,-,-
+Non-IID Federated,FedAvg Global (NON_IID),"125,973 (Federated 3x)",16.737,2.447,74.18,91.38,60.34,74.11,7.52,8981,730,5090,7743

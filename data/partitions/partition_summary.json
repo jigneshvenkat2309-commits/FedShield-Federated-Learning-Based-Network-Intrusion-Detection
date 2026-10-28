@@ -1,0 +1,124 @@
+{
+  "iid": {
+    "condition": "iid",
+    "config": {
+      "seed": 42,
+      "num_clients": 3,
+      "strategy": "stratified_random"
+    },
+    "num_clients": 3,
+    "total_samples": 125973,
+    "clients": {
+      "client_1": {
+        "num_samples": 41992,
+        "class_counts": {
+          "0": 22448,
+          "1": 19544
+        },
+        "class_proportions_pct": {
+          "0": 53.46,
+          "1": 46.54
+        },
+        "feature_shape": [
+          41992,
+          122
+        ],
+        "file_size_bytes": 1429393
+      },
+      "client_2": {
+        "num_samples": 41991,
+        "class_counts": {
+          "0": 22448,
+          "1": 19543
+        },
+        "class_proportions_pct": {
+          "0": 53.46,
+          "1": 46.54
+        },
+        "feature_shape": [
+          41991,
+          122
+        ],
+        "file_size_bytes": 1429672
+      },
+      "client_3": {
+        "num_samples": 41990,
+        "class_counts": {
+          "0": 22447,
+          "1": 19543
+        },
+        "class_proportions_pct": {
+          "0": 53.46,
+          "1": 46.54
+        },
+        "feature_shape": [
+          41990,
+          122
+        ],
+        "file_size_bytes": 1432501
+      }
+    }
+  },
+  "non_iid": {
+    "condition": "non_iid",
+    "config": {
+      "seed": 42,
+      "num_clients": 3,
+      "strategy": "dirichlet_label_skew",
+      "alpha": 0.3,
+      "min_class_ratio": 0.05
+    },
+    "num_clients": 3,
+    "total_samples": 125973,
+    "clients": {
+      "client_1": {
+        "num_samples": 47008,
+        "class_counts": {
+          "0": 43378,
+          "1": 3630
+        },
+        "class_proportions_pct": {
+          "0": 92.28,
+          "1": 7.72
+        },
+        "feature_shape": [
+          47008,
+          122
+        ],
+        "file_size_bytes": 1613372
+      },
+      "client_2": {
+        "num_samples": 51654,
+        "class_counts": {
+          "0": 4895,
+          "1": 46759
+        },
+        "class_proportions_pct": {
+          "0": 9.48,
+          "1": 90.52
+        },
+        "feature_shape": [
+          51654,
+          122
+        ],
+        "file_size_bytes": 1556103
+      },
+      "client_3": {
+        "num_samples": 27311,
+        "class_counts": {
+          "0": 19070,
+          "1": 8241
+        },
+        "class_proportions_pct": {
+          "0": 69.83,
+          "1": 30.17
+        },
+        "feature_shape": [
+          27311,
+          122
+        ],
+        "file_size_bytes": 948606
+      }
+    }
+  }
+}

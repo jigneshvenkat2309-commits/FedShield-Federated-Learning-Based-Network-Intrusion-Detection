@@ -1,0 +1,3 @@
+Model,Condition,Rounds,Local Epochs,Total Samples,Training Time (s),Comm Payload (MB),Accuracy (%),Precision (%),Recall (%),Macro-F1 (%),FPR (%),TN,FP,FN,TP
+FedAvg Global (IID),iid,10,1,125973,21.594,2.447,76.32,91.98,63.98,76.29,7.37,8995,716,4622,8211
+FedAvg Global (NON_IID),non_iid,10,1,125973,16.737,2.447,74.18,91.38,60.34,74.11,7.52,8981,730,5090,7743

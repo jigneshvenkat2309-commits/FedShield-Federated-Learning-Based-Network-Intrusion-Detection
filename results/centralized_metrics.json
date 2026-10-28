@@ -1,0 +1,27 @@
+{
+  "test_loss": 1.496738725917571,
+  "accuracy": 0.78708303761533,
+  "precision": 0.9687244719337146,
+  "recall": 0.6468479700771449,
+  "f1_binary": 0.775721895149986,
+  "f1_macro": 0.7865352699595239,
+  "false_positive_rate": 0.027597569766244466,
+  "confusion_matrix": {
+    "TN": 9443,
+    "FP": 268,
+    "FN": 4532,
+    "TP": 8301,
+    "total": 22544
+  },
+  "threshold": 0.5,
+  "total_test_samples": 22544,
+  "model_name": "Centralized Baseline",
+  "condition": "centralized",
+  "client_id": "all",
+  "seed": 42,
+  "num_train_samples": 125973,
+  "batch_size": 1024,
+  "epochs_completed": 10,
+  "learning_rate": 0.001,
+  "total_training_time_sec": 17.495
+}

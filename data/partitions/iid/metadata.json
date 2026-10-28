@@ -1,0 +1,60 @@
+{
+  "condition": "iid",
+  "config": {
+    "seed": 42,
+    "num_clients": 3,
+    "strategy": "stratified_random"
+  },
+  "num_clients": 3,
+  "total_samples": 125973,
+  "clients": {
+    "client_1": {
+      "num_samples": 41992,
+      "class_counts": {
+        "0": 22448,
+        "1": 19544
+      },
+      "class_proportions_pct": {
+        "0": 53.46,
+        "1": 46.54
+      },
+      "feature_shape": [
+        41992,
+        122
+      ],
+      "file_size_bytes": 1429393
+    },
+    "client_2": {
+      "num_samples": 41991,
+      "class_counts": {
+        "0": 22448,
+        "1": 19543
+      },
+      "class_proportions_pct": {
+        "0": 53.46,
+        "1": 46.54
+      },
+      "feature_shape": [
+        41991,
+        122
+      ],
+      "file_size_bytes": 1429672
+    },
+    "client_3": {
+      "num_samples": 41990,
+      "class_counts": {
+        "0": 22447,
+        "1": 19543
+      },
+      "class_proportions_pct": {
+        "0": 53.46,
+        "1": 46.54
+      },
+      "feature_shape": [
+        41990,
+        122
+      ],
+      "file_size_bytes": 1432501
+    }
+  }
+}

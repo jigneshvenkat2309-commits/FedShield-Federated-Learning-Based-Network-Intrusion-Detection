@@ -1,0 +1,114 @@
+{
+  "centralized_all": {
+    "model_name": "Centralized Baseline",
+    "confusion_matrix": {
+      "TN": 9443,
+      "FP": 268,
+      "FN": 4532,
+      "TP": 8301,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.78708303761533,
+    "recall": 0.6468479700771449,
+    "precision": 0.9687244719337146,
+    "f1_macro": 0.7865352699595239,
+    "false_positive_rate": 0.027597569766244466
+  },
+  "iid_client_1": {
+    "model_name": "Local Model (IID - client_1)",
+    "confusion_matrix": {
+      "TN": 8985,
+      "FP": 726,
+      "FN": 5021,
+      "TP": 7812,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.7450762952448545,
+    "recall": 0.6087430842359541,
+    "precision": 0.9149683766690091,
+    "f1_macro": 0.7443842704620447,
+    "false_positive_rate": 0.07476058078467716
+  },
+  "iid_client_2": {
+    "model_name": "Local Model (IID - client_2)",
+    "confusion_matrix": {
+      "TN": 8982,
+      "FP": 729,
+      "FN": 4822,
+      "TP": 8011,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.7537704045422285,
+    "recall": 0.6242499805189745,
+    "precision": 0.9165903890160183,
+    "f1_macro": 0.75331276537691,
+    "false_positive_rate": 0.07506950880444857
+  },
+  "iid_client_3": {
+    "model_name": "Local Model (IID - client_3)",
+    "confusion_matrix": {
+      "TN": 8984,
+      "FP": 727,
+      "FN": 5027,
+      "TP": 7806,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.7447657913413769,
+    "recall": 0.6082755396244058,
+    "precision": 0.9148013594281027,
+    "f1_macro": 0.7440669880577042,
+    "false_positive_rate": 0.07486355679126763
+  },
+  "non_iid_client_1": {
+    "model_name": "Local Model (NON_IID - client_1)",
+    "confusion_matrix": {
+      "TN": 9062,
+      "FP": 649,
+      "FN": 5815,
+      "TP": 7018,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.7132718239886444,
+    "recall": 0.5468713473077222,
+    "precision": 0.9153515064562411,
+    "f1_macro": 0.7108952294793812,
+    "false_positive_rate": 0.0668314282772114
+  },
+  "non_iid_client_2": {
+    "model_name": "Local Model (NON_IID - client_2)",
+    "confusion_matrix": {
+      "TN": 8852,
+      "FP": 859,
+      "FN": 3214,
+      "TP": 9619,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.8193310858765082,
+    "recall": 0.7495519364139328,
+    "precision": 0.918018705859897,
+    "f1_macro": 0.8191217155131658,
+    "false_positive_rate": 0.08845638966120895
+  },
+  "non_iid_client_3": {
+    "model_name": "Local Model (NON_IID - client_3)",
+    "confusion_matrix": {
+      "TN": 9020,
+      "FP": 691,
+      "FN": 5352,
+      "TP": 7481,
+      "total": 22544
+    },
+    "total_test_samples": 22544,
+    "accuracy": 0.7319464158977999,
+    "recall": 0.5829502064988701,
+    "precision": 0.9154429760156633,
+    "f1_macro": 0.7306913527241341,
+    "false_positive_rate": 0.07115642055401092
+  }
+}

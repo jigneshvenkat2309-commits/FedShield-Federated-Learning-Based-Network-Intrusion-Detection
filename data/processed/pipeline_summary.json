@@ -1,0 +1,30 @@
+{
+  "mode": "binary",
+  "random_seed": 42,
+  "train_samples": 125973,
+  "test_samples": 22544,
+  "num_features": 122,
+  "numerical_features_count": 38,
+  "categorical_features_count": 3,
+  "one_hot_columns_count": 84,
+  "class_mapping": {
+    "normal": 0,
+    "attack": 1
+  },
+  "quality_report": {
+    "train_shape": [
+      125973,
+      43
+    ],
+    "test_shape": [
+      22544,
+      43
+    ],
+    "train_nulls": 0,
+    "test_nulls": 0,
+    "train_non_finite": 0,
+    "test_non_finite": 0,
+    "train_duplicate_rows": 0,
+    "test_duplicate_rows": 0
+  }
+}
