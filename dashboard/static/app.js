@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isRunning: false,
     eventSource: null,
     condition: "iid",
+    mode: "visual", // 'visual' | 'live'
     speed: 1.0,
     currentRound: 0,
     totalRounds: 10,
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnStartSim = document.getElementById("btnStartSim");
   const btnResetSim = document.getElementById("btnResetSim");
   const conditionSelect = document.getElementById("conditionSelect");
+  const modeSelect = document.getElementById("modeSelect");
   const speedButtons = document.querySelectorAll(".btn-speed");
   const simPhaseBadge = document.getElementById("simPhaseBadge");
   const roundIndicator = document.getElementById("roundIndicator");
@@ -148,6 +150,18 @@ document.addEventListener("DOMContentLoaded", () => {
       logTerminal(`Switched condition to: ${state.condition.toUpperCase()}`, "warn");
     });
 
+    if (modeSelect) {
+      modeSelect.addEventListener("change", (e) => {
+        state.mode = e.target.value;
+        resetSimulation();
+        if (state.mode === "live") {
+          logTerminal("[ENGINE] Live PyTorch Mode Selected. The simulation will execute actual neural network SGD & evaluations on your CPU.", "warn");
+        } else {
+          logTerminal("[ENGINE] Visual Replay Mode Selected.", "info");
+        }
+      });
+    }
+
     speedButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         speedButtons.forEach(b => b.classList.remove("active"));
@@ -211,11 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
     state.isRunning = true;
     btnStartSim.classList.add("running");
     btnStartSim.querySelector("span").textContent = "Pause Simulation";
-    simPhaseBadge.textContent = "Phase: Running";
+    simPhaseBadge.textContent = state.mode === "live" ? "Phase: PyTorch Training" : "Phase: Running";
 
-    logTerminal(`Connecting to FedAvg Stream [Condition: ${state.condition.toUpperCase()}, Speed: ${state.speed}x]...`, "info");
+    const modeLabel = state.mode === "live" ? "Live PyTorch CPU Execution" : `Visual Replay (${state.speed}x)`;
+    logTerminal(`Connecting to FedAvg Stream [Engine: ${modeLabel}, Condition: ${state.condition.toUpperCase()}]...`, "info");
 
-    const url = `/api/simulation/stream?condition=${encodeURIComponent(state.condition)}&speed=${state.speed}`;
+    const url = `/api/simulation/stream?condition=${encodeURIComponent(state.condition)}&speed=${state.speed}&mode=${encodeURIComponent(state.mode)}`;
     state.eventSource = new EventSource(url);
 
     state.eventSource.onopen = () => {

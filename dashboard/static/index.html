@@ -37,11 +37,19 @@
     </div>
 
     <div class="header-right">
+      <div class="engine-picker">
+        <label for="modeSelect" class="picker-label">Engine:</label>
+        <select id="modeSelect" class="custom-select engine-select">
+          <option value="visual" selected>Visual Replay (Fast)</option>
+          <option value="live">⚡ Live PyTorch Training (CPU)</option>
+        </select>
+      </div>
+
       <div class="condition-picker">
-        <label for="conditionSelect" class="picker-label">Data Distribution:</label>
+        <label for="conditionSelect" class="picker-label">Data:</label>
         <select id="conditionSelect" class="custom-select">
-          <option value="iid" selected>IID (Balanced 3 Clients)</option>
-          <option value="non_iid">Non-IID (Dirichlet α=0.3 Label Skew)</option>
+          <option value="iid" selected>IID (Balanced)</option>
+          <option value="non_iid">Non-IID (Dirichlet α=0.3)</option>
         </select>
       </div>
 
