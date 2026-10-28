@@ -87,10 +87,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const chartCanvas = document.getElementById("liveChartCanvas");
   const chartCtx = chartCanvas.getContext("2d");
 
+  function resizeCanvases() {
+    const topRect = topCanvas.parentElement.getBoundingClientRect();
+    if (topRect.width > 0) {
+      topCanvas.width = topRect.width;
+      topCanvas.height = 380;
+      const cx = topCanvas.width / 2;
+      const cy = topCanvas.height / 2;
+      state.nodes.server.x = cx;
+      state.nodes.server.y = cy - 10;
+      state.nodes.client_1.x = cx - Math.min(cx * 0.55, 175);
+      state.nodes.client_1.y = cy - 90;
+      state.nodes.client_2.x = cx + Math.min(cx * 0.55, 175);
+      state.nodes.client_2.y = cy - 90;
+      state.nodes.client_3.x = cx;
+      state.nodes.client_3.y = cy + 115;
+    }
+    const chartRect = chartCanvas.parentElement.getBoundingClientRect();
+    if (chartRect.width > 0) {
+      chartCanvas.width = chartRect.width;
+      chartCanvas.height = 250;
+    }
+  }
+
   // -------------------------------------------------------------------------
   // Initialization & Data Loading
   // -------------------------------------------------------------------------
   function init() {
+    resizeCanvases();
+    window.addEventListener("resize", () => {
+      resizeCanvases();
+      drawLiveChart();
+    });
     updateClientLabelsForCondition(state.condition);
     setupEventListeners();
     fetchBenchmarkTable();
@@ -346,14 +374,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     valRecall.textContent = `${m.test_recall.toFixed(2)}%`;
     const attacksDetected = Math.round((m.test_recall / 100) * 12833);
-    badgeRecall.textContent = `${attacksDetected:,} Caught`;
+    badgeRecall.textContent = `${attacksDetected.toLocaleString()} Caught`;
     badgeRecall.className = "kpi-badge good";
-    compRecall.textContent = `Attacks Detected: ${attacksDetected:,} / 12,833`;
+    compRecall.textContent = `Attacks Detected: ${attacksDetected.toLocaleString()} / 12,833`;
 
     valFpr.textContent = `${m.test_fpr.toFixed(2)}%`;
     const falseAlarms = Math.round((m.test_fpr / 100) * 9711);
-    badgeFpr.textContent = `${falseAlarms:,} Alarms`;
-    compFpr.textContent = `Benign False Alarms: ${falseAlarms:,} / 9,711`;
+    badgeFpr.textContent = `${falseAlarms.toLocaleString()} Alarms`;
+    compFpr.textContent = `Benign False Alarms: ${falseAlarms.toLocaleString()} / 9,711`;
 
     valComm.textContent = `${m.cumulative_mb.toFixed(3)} MB`;
     const mib = (m.cumulative_mb * 1000000 / 1048576).toFixed(2);
