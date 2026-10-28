@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FedShield :: Federated Learning Intrusion Detection Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-badge">
+        <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="logo-titles">
+          <h1 class="logo-text">FedShield</h1>
+          <span class="logo-subtext">FL-NIDS Command Center & Simulation Deck</span>
+        </div>
+      </div>
+      <div class="status-pill online">
+        <span class="pulsing-dot"></span>
+        <span id="systemStatusText">System Ready</span>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="data-tag">
+        <span class="data-label">BENCHMARK DATASET</span>
+        <span class="data-val">NSL-KDD (148,517 Flows &bull; 122 Features)</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="condition-picker">
+        <label for="conditionSelect" class="picker-label">Data Distribution:</label>
+        <select id="conditionSelect" class="custom-select">
+          <option value="iid" selected>IID (Balanced 3 Clients)</option>
+          <option value="non_iid">Non-IID (Dirichlet α=0.3 Label Skew)</option>
+        </select>
+      </div>
+
+      <div class="speed-control">
+        <span class="control-label">Speed:</span>
+        <div class="btn-group">
+          <button class="btn-speed" data-speed="0.5">0.5x</button>
+          <button class="btn-speed active" data-speed="1">1x</button>
+          <button class="btn-speed" data-speed="2.5">2.5x</button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="btnStartSim" class="btn btn-primary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span>Start Simulation</span>
+        </button>
+        <button id="btnResetSim" class="btn btn-ghost" title="Reset Simulation State">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="dashboard-container">
+    
+    <!-- Top-Level Live KPI Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card" id="kpiAccuracy">
+        <div class="kpi-header">
+          <span class="kpi-title">Global Test Accuracy</span>
+          <span class="kpi-icon">🎯</span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-value" id="valAccuracy">--.-%</span>
+          <span class="kpi-badge" id="badgeAccuracy">Awaiting Run</span>
+        </div>
+        <div class="kpi-footer">
+          <span id="compAccuracy">Centralized Target: 78.71%</span>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpiRecall">
+        <div class="kpi-header">
+          <span class="kpi-title">Attack Recall Rate</span>
+          <span class="kpi-icon">🛡️</span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-value" id="valRecall">--.-%</span>
+          <span class="kpi-badge" id="badgeRecall">Awaiting Run</span>
+        </div>
+        <div class="kpi-footer">
+          <span id="compRecall">Attacks Detected: -- / 12,833</span>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpiFpr">
+        <div class="kpi-header">
+          <span class="kpi-title">False Positive Rate (FPR)</span>
+          <span class="kpi-icon">⚠️</span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-value" id="valFpr">--.-%</span>
+          <span class="kpi-badge good" id="badgeFpr">Awaiting Run</span>
+        </div>
+        <div class="kpi-footer">
+          <span id="compFpr">Benign False Alarms: -- / 9,711</span>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpiComm">
+        <div class="kpi-header">
+          <span class="kpi-title">Cumulative Comm Payload</span>
+          <span class="kpi-icon">📡</span>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-value" id="valComm">0.000 MB</span>
+          <span class="kpi-badge" id="badgeComm">0.00 MiB</span>
+        </div>
+        <div class="kpi-footer">
+          <span id="compComm">Model Size: 41.77 KB (9,985 params)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Simulation Stage -->
+    <section class="simulation-stage">
+      <!-- Left: Interactive Network Topology -->
+      <div class="stage-card topology-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h2 class="panel-title">Federated Network Topology Visualizer</h2>
+            <span class="panel-badge" id="simPhaseBadge">Phase: Idle</span>
+          </div>
+          <div class="topology-legend">
+            <span class="legend-item"><span class="dot server-dot"></span> FedAvg Server</span>
+            <span class="legend-item"><span class="dot client-dot c1"></span> Client 1</span>
+            <span class="legend-item"><span class="dot client-dot c2"></span> Client 2</span>
+            <span class="legend-item"><span class="dot client-dot c3"></span> Client 3</span>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="topologyCanvas" width="600" height="420"></canvas>
+          <div class="topology-overlay" id="topologyOverlay">
+            <div class="node-info-card" id="hoverNodeCard"></div>
+          </div>
+        </div>
+
+        <div class="topology-footer">
+          <div class="flow-step-tracker">
+            <div class="step-chip" id="stepBroadcast">1. Broadcast w_t</div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-chip" id="stepSGD">2. Local SGD Training</div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-chip" id="stepUpload">3. Upload Weights</div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-chip" id="stepAggregate">4. FedAvg Weighted Sum</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Real-time Telemetry & Live Convergence Curves -->
+      <div class="stage-card telemetry-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h2 class="panel-title">Real-Time Convergence & Metrics Curves</h2>
+            <span class="panel-round-indicator" id="roundIndicator">Round: 0 / 10</span>
+          </div>
+          <div class="chart-toggle-group">
+            <button class="chart-tab active" data-chart="perf">Accuracy & Recall</button>
+            <button class="chart-tab" data-chart="loss">Client Loss Trajectory</button>
+          </div>
+        </div>
+
+        <!-- Progress bar of current round -->
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="roundProgressFill"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="roundProgressText">Simulation ready to start.</span>
+            <span id="roundPercentText">0%</span>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <canvas id="liveChartCanvas" width="560" height="260"></canvas>
+        </div>
+
+        <!-- Live Round Stats Row -->
+        <div class="round-stats-row">
+          <div class="stat-box">
+            <span class="stat-lbl">Last Round Loss:</span>
+            <span class="stat-val" id="statRoundLoss">--</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Round Duration:</span>
+            <span class="stat-val" id="statRoundDuration">--</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Bandwidth / Round:</span>
+            <span class="stat-val">250.62 KB</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Analytics & Benchmark Showdown -->
+    <section class="details-section">
+      <div class="details-nav">
+        <button class="tab-btn active" data-tab="tabComparison">📊 Full Benchmark Comparison Matrix</button>
+        <button class="tab-btn" data-tab="tabConfusion">🔲 Audited Confusion Matrices</button>
+        <button class="tab-btn" data-tab="tabHeterogeneity">🌐 Client Heterogeneity & Drift</button>
+        <button class="tab-btn" data-tab="tabFigures">🖼️ Publication Figures Gallery</button>
+      </div>
+
+      <!-- Tab 1: Comparison Matrix -->
+      <div class="tab-pane active" id="tabComparison">
+        <div class="table-container">
+          <table class="benchmark-table" id="comparisonTable">
+            <thead>
+              <tr>
+                <th>Model / Strategy</th>
+                <th>Condition</th>
+                <th>Role / Scope</th>
+                <th>Train Samples</th>
+                <th>Comm Payload</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Attack Recall</th>
+                <th>Macro-F1</th>
+                <th>FPR</th>
+                <th>Δ vs Local Avg</th>
+                <th>Δ vs Centralized</th>
+              </tr>
+            </thead>
+            <tbody id="comparisonTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Confusion Matrices -->
+      <div class="tab-pane" id="tabConfusion">
+        <div class="confusion-grid">
+          <!-- Centralized -->
+          <div class="cm-card" id="cmCentralized">
+            <div class="cm-header">
+              <h3 class="cm-title">Centralized Baseline</h3>
+              <span class="cm-tag">Upper Bound (125,973 train)</span>
+            </div>
+            <div class="cm-table-wrap">
+              <div class="cm-grid">
+                <div class="cm-cell tn"><span class="cm-val" id="cmCentTN">9,443</span><span class="cm-desc">True Negative (Benign)</span></div>
+                <div class="cm-cell fp"><span class="cm-val" id="cmCentFP">268</span><span class="cm-desc">False Positive (False Alarm)</span></div>
+                <div class="cm-cell fn"><span class="cm-val" id="cmCentFN">4,532</span><span class="cm-desc">False Negative (Missed Attack)</span></div>
+                <div class="cm-cell tp"><span class="cm-val" id="cmCentTP">8,301</span><span class="cm-desc">True Positive (Caught Attack)</span></div>
+              </div>
+            </div>
+            <div class="cm-footer">
+              <span>Total Test Flows: 22,544</span>
+              <span>FPR: 2.76%</span>
+            </div>
+          </div>
+
+          <!-- IID FedAvg -->
+          <div class="cm-card" id="cmIID">
+            <div class="cm-header">
+              <h3 class="cm-title">FedAvg Global Model (IID)</h3>
+              <span class="cm-tag badge-iid">10 Rounds &bull; 3 Balanced Clients</span>
+            </div>
+            <div class="cm-table-wrap">
+              <div class="cm-grid">
+                <div class="cm-cell tn"><span class="cm-val" id="cmIidTN">8,995</span><span class="cm-desc">True Negative (Benign)</span></div>
+                <div class="cm-cell fp"><span class="cm-val" id="cmIidFP">716</span><span class="cm-desc">False Positive (False Alarm)</span></div>
+                <div class="cm-cell fn"><span class="cm-val" id="cmIidFN">4,622</span><span class="cm-desc">False Negative (Missed Attack)</span></div>
+                <div class="cm-cell tp"><span class="cm-val" id="cmIidTP">8,211</span><span class="cm-desc">True Positive (Caught Attack)</span></div>
+              </div>
+            </div>
+            <div class="cm-footer">
+              <span>+335 attacks caught vs local mean</span>
+              <span>FPR: 7.37%</span>
+            </div>
+          </div>
+
+          <!-- Non-IID FedAvg -->
+          <div class="cm-card" id="cmNonIID">
+            <div class="cm-header">
+              <h3 class="cm-title">FedAvg Global Model (Non-IID)</h3>
+              <span class="cm-tag badge-non-iid">10 Rounds &bull; Skewed Clients (α=0.3)</span>
+            </div>
+            <div class="cm-table-wrap">
+              <div class="cm-grid">
+                <div class="cm-cell tn"><span class="cm-val" id="cmNonIidTN">8,981</span><span class="cm-desc">True Negative (Benign)</span></div>
+                <div class="cm-cell fp"><span class="cm-val" id="cmNonIidFP">730</span><span class="cm-desc">False Positive (False Alarm)</span></div>
+                <div class="cm-cell fn"><span class="cm-val" id="cmNonIidFN">5,090</span><span class="cm-desc">False Negative (Missed Attack)</span></div>
+                <div class="cm-cell tp"><span class="cm-val" id="cmNonIidTP">7,743</span><span class="cm-desc">True Positive (Caught Attack)</span></div>
+              </div>
+            </div>
+            <div class="cm-footer">
+              <span>Rescued Client 1 (+725 attacks)</span>
+              <span>FPR: 7.52%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Client Heterogeneity & Drift -->
+      <div class="tab-pane" id="tabHeterogeneity">
+        <div class="heterogeneity-grid">
+          <div class="het-card">
+            <h3 class="het-title">IID Client Partition Distribution (Stratified)</h3>
+            <p class="het-sub">Each client holds exactly 1/3 of the dataset (~41,991 flows) with equal class representation.</p>
+            <div class="bar-group">
+              <div class="bar-item">
+                <span class="bar-lbl">Client 1 (Subnet A)</span>
+                <div class="stacked-bar">
+                  <div class="bar-chunk normal" style="width: 53.46%">53.5% Normal</div>
+                  <div class="bar-chunk attack" style="width: 46.54%">46.5% Attack</div>
+                </div>
+              </div>
+              <div class="bar-item">
+                <span class="bar-lbl">Client 2 (Subnet B)</span>
+                <div class="stacked-bar">
+                  <div class="bar-chunk normal" style="width: 53.46%">53.5% Normal</div>
+                  <div class="bar-chunk attack" style="width: 46.54%">46.5% Attack</div>
+                </div>
+              </div>
+              <div class="bar-item">
+                <span class="bar-lbl">Client 3 (Subnet C)</span>
+                <div class="stacked-bar">
+                  <div class="bar-chunk normal" style="width: 53.46%">53.5% Normal</div>
+                  <div class="bar-chunk attack" style="width: 46.54%">46.5% Attack</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="het-card">
+            <h3 class="het-title">Non-IID Dirichlet Skew (α = 0.3)</h3>
+            <p class="het-sub">Simulates extreme organizational variance: corporate workstations vs. DMZ honeypots.</p>
+            <div class="bar-group">
+              <div class="bar-item">
+                <span class="bar-lbl">Client 1 &mdash; Workstation LAN (47,008 flows)</span>
+                <div class="stacked-bar">
+                  <div class="bar-chunk normal" style="width: 92.28%">92.3% Normal</div>
+                  <div class="bar-chunk attack" style="width: 7.72%">7.7%</div>
+                </div>
+                <div class="bar-note warn">Isolated Recall was only 54.69% (Blind Spot). FedAvg lifted it to 60.34% (+725 attacks)!</div>
+              </div>
+              <div class="bar-item">
+                <span class="bar-lbl">Client 2 &mdash; DMZ Honeypot (51,654 flows)</span>
+                <div class="stacked-bar">
+                  <div class="bar-chunk normal" style="width: 9.48%">9.5%</div>
+                  <div class="bar-chunk attack" style="width: 90.52%">90.5% Attack</div>
+                </div>
+                <div class="bar-note info">Over-predicts attacks. Isolated FPR was 8.85%. FedAvg reduced FPR to 7.52% (saved 129 false alarms).</div>
+              </div>
+              <div class="bar-item">
+                <span class="bar-lbl">Client 3 &mdash; Mixed Gateway (27,311 flows)</span>
+                <div class="stacked-bar">
+                  <div class="bar-chunk normal" style="width: 69.83%">69.8% Normal</div>
+                  <div class="bar-chunk attack" style="width: 30.17%">30.2% Attack</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Publication Figures Gallery -->
+      <div class="tab-pane" id="tabFigures">
+        <div class="figures-gallery">
+          <div class="figure-item">
+            <img src="/api/figures/1_baseline_comparison.png" alt="Baseline Comparison" class="figure-thumb" loading="lazy">
+            <div class="figure-caption">
+              <h4>Figure 1: Baseline Comparison</h4>
+              <p>Multi-metric benchmark across Accuracy, Attack Recall, Macro-F1, and FPR.</p>
+            </div>
+          </div>
+
+          <div class="figure-item">
+            <img src="/api/figures/2_client_heterogeneity.png" alt="Client Heterogeneity" class="figure-thumb" loading="lazy">
+            <div class="figure-caption">
+              <h4>Figure 2: Client Heterogeneity</h4>
+              <p>Traffic composition and metric disparity between isolated clients.</p>
+            </div>
+          </div>
+
+          <div class="figure-item">
+            <img src="/api/figures/3_fedavg_training_trajectory.png" alt="FedAvg Trajectory" class="figure-thumb" loading="lazy">
+            <div class="figure-caption">
+              <h4>Figure 3: Training Trajectory</h4>
+              <p>Loss and test metrics convergence over 10 communication rounds.</p>
+            </div>
+          </div>
+
+          <div class="figure-item">
+            <img src="/api/figures/4_confusion_matrices.png" alt="Confusion Matrices" class="figure-thumb" loading="lazy">
+            <div class="figure-caption">
+              <h4>Figure 4: Confusion Matrices</h4>
+              <p>Audited error distributions on 22,544 held-out test flows.</p>
+            </div>
+          </div>
+
+          <div class="figure-item">
+            <img src="/api/figures/5_communication_tradeoff.png" alt="Communication Trade-off" class="figure-thumb" loading="lazy">
+            <div class="figure-caption">
+              <h4>Figure 5: Communication Trade-off</h4>
+              <p>Cumulative payload transfer (2.566 MB) vs. accuracy & recall gains.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-Time Event Terminal -->
+    <section class="terminal-section">
+      <div class="terminal-header">
+        <div class="term-left">
+          <span class="term-dot red"></span>
+          <span class="term-dot yellow"></span>
+          <span class="term-dot green"></span>
+          <span class="term-title">FEDSHIELD LIVE PROTOCOL TERMINAL</span>
+        </div>
+        <div class="term-actions">
+          <button id="btnClearTerm" class="term-btn">Clear Logs</button>
+        </div>
+      </div>
+      <div class="terminal-body" id="termLogs">
+        <div class="log-line info">[INIT] FedShield Command Center initialized. Ready for simulation.</div>
+        <div class="log-line">[SYS] Model: IntrusionMLP (122-64-32-1) | Total Parameters: 9,985 (41.77 KB)</div>
+        <div class="log-line">[SYS] NSL-KDD Test Set: 22,544 held-out flows loaded into evaluation memory.</div>
+        <div class="log-line">[SYS] Select condition (IID or Non-IID) and click 'Start Simulation'.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
